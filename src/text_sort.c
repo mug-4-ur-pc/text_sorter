@@ -95,7 +95,7 @@ bool read_file (string_array strings, const char* file_path)
 bool construct_string_array (string_array strings, const char* mbstrings)
 {
 	strings->head = (wchar_t*) calloc(sizeof *strings->head,
-	                                  strings->n_mbchars);
+	                                  strings->n_mbchars + 1);
 	if (!strings->head)
 		return false;
 
@@ -313,12 +313,52 @@ void sort (void* start, const size_t n, const size_t size,
 	assert(size > 0);
 	assert(comparator);
 
-	void *end = start + (n - 1) * size;
+	if (n == 2)
+	{
+		void* last = start + size;
+		if (comparator(start, last) > 0)
+			mem_swap(start, last, size);
 
-	for (void *first = start; first <= end; first += size)
-		for (void *second = first + size; second <= end; second += size)
-			if (comparator(first, second) > 0)
-				mem_swap(first, second, size);
+		return;
+	}
+	else if (n < 2)
+		return;
+
+	void*  pivot = split_array(start, n, size, comparator);
+	size_t n_1   = (pivot - start) / size;
+	size_t n_2   = n - n_1;
+	sort(start, n_1, size, comparator);
+	sort(pivot, n_2, size, comparator);
+}
+
+
+void* split_array (void* start, const size_t n, const size_t size,
+                   int (*comparator) (const void*, const void*))
+{
+	void* end   = start + (n - 1) * size;
+	void* pivot = start;
+	void* left  = start + size;
+	void* right = end;
+
+	while (left < right)
+	{
+		while (left < end && comparator(left, pivot) < 0)
+			left += size;
+
+		while (start < right && comparator(pivot, right) <= 0)
+			right -= size;
+
+		if (left < right)
+			mem_swap(left, right, size);
+	}
+
+	if (start != right)
+	{
+		mem_swap(pivot, right, size);
+		return right;
+	}
+	else
+		return start + size;
 }
 
 

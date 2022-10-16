@@ -225,6 +225,22 @@ void sort (void* start, const size_t n, const size_t size,
 
 
 /*!
+ * This function splits the array into two parts.
+ * There are elements, smaller then first element in the array 
+ * in the left size. In the right side there are other elements.
+ * 
+ *  @param[in,out] start      - array that will be splited.
+ *  @param[in]     n          - number of elements in array.
+ *  @param[in]     size       - size of element in this array.
+ *  @param[in]     comparator - function which can compare array elements.
+ *
+ * @return the split point.
+ */
+void* split_array (void* start, const size_t n, const size_t size,
+                   int (*comparator) (const void*, const void*));
+
+
+/*!
  *  This function applies lexicorphyse comparison to two wchar_t strings.
  *  
  *  @param[in] str1 - first string to comparison.

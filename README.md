@@ -38,8 +38,8 @@ To use this program:
 
 ## Example of usage
 
-    $ gcc main.c TextSort.c -o TextSort
-    $ ./TextSort
+    $ gcc main.c text_sort.c -o text_sort
+    $ ./text_sort
     Enter the input file path:
     text.txt
     Enter the output file path:
