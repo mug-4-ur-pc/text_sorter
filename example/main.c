@@ -5,12 +5,17 @@
 
 #include "text_sort.h"
 
+#define LOCALE (char*) "ru_RU.UTF-8"
+
 /*!
  * Main function.
  */
 int main (void)
 {
-	setlocale(LC_ALL, "ru_RU.UTF-8");
+	if (!setlocale(LC_ALL, LOCALE))
+	{
+		printf("Error! Program cannot find locale: %s", LOCALE);
+	}
 
 	char file_path[BUFSIZ] = {};
 	string_array strings = initialize_string_array();
